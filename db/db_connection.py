@@ -1,31 +1,31 @@
 import mysql.connector
 from mysql.connector import Error
 
-# conexión a la base de datos
-def obtener_conexion():
+# Database connection
+def db_connection():
     try:
-        conexion = mysql.connector.connect(
+        connection = mysql.connector.connect(
             host='127.0.0.1',
             user='myuser',
             password='mypassword',
             database='mydatabase'
         )
-        return conexion
+        return connection
     except Error as e:
-        print(f"Error al conectar a la base de datos MySQL: {e}")
+        print(f"Error connecting to the database: {e}")
         return None
     
-# función para hacer una consulta sql
-def realizar_consulta(consulta):
+# SQL request
+def sql_request(consulta):
     try:
-        conexion = obtener_conexion()
-        if conexion is not None:
-            cursor = conexion.cursor()
+        connection = db_connection()
+        if connection is not None:
+            cursor = connection.cursor()
             cursor.execute(consulta)
-            resultados = cursor.fetchall()
-            return resultados
+            results = cursor.fetchall()
+            return results
     except Error as e:
         print(f"Error al realizar consulta: {e}")
     finally:
-        if conexion is not None and conexion.is_connected():
-            conexion.close()
+        if connection is not None and connection.is_connected():
+            connection.close()
