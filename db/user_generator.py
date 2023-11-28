@@ -93,41 +93,53 @@ def user_generator(param):
         pension = random.choices(df_pension, weights=df_frec_pension, k=1)[0]
         # seleccion discapacidad
         if(age >= 65 and age < 70):   
-            pobabilities = [0.6536,0.3464]                      # frecuencias obtenidas del INE 
+            pobabilities = [0.864,0.136]                      # frecuencias obtenidas del INE 
             disable = random.choices([False, True], weights=pobabilities)[0]
             if(disable == True):
                 disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
             else:
                 disability_grade = 0
         elif(age >= 70 and age < 75):   
-            pobabilities = [0.5914,0.4086]                      # frecuencias obtenidas del INE 
+            pobabilities = [0.816,0.184]                      # frecuencias obtenidas del INE 
             disable = random.choices([False, True], weights=pobabilities)[0]
             if(disable == True):
                 disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
             else:
                 disability_grade = 0
         elif(age >= 75 and age < 80):   
-            pobabilities = [0.523,0.477]                      # frecuencias obtenidas del INE 
+            pobabilities = [0.778,0.222]                      # frecuencias obtenidas del INE 
             disable = random.choices([False, True], weights=pobabilities)[0]
             if(disable == True):
-                disability_grade = random.choices([33.00,65.00,80.00],weights=[0.57,0.24,0.19])[0]
+                disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
             else:
                 disability_grade = 0
         elif(age >= 80 and age < 85):   
-            pobabilities = [0.4786,0.5214]                      # frecuencias obtenidas del INE 
+            pobabilities = [0.415,0.585]                      # frecuencias obtenidas del INE 
             disable = random.choices([False, True], weights=pobabilities)[0]
             if(disable == True):
                 disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
             else:
                 disability_grade = 0
         elif(age >= 85):   
-            pobabilities = [0.5432,0.4568]                      # frecuencias obtenidas del INE 
+            pobabilities = [0.868,0.132]                      # frecuencias obtenidas del INE 
             disable = random.choices([False, True], weights=pobabilities)[0]
             if(disable == True):
                 disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
             else:
                 disability_grade = 0
         # seleccion estado_civil
+        if(age >= 65 and age < 70):
+            if(sex == "HOMBRE"):
+                marital_status = random.choices(["SOLTERX","CASADX","VIUDX"], weights=[0.102,0.847,0.051])[0]
+            else:
+                marital_status = random.choices(["SOLTERX","CASADX","VIUDX"], weights=[0.091,0.736,0.173])[0]
+        else:
+            if(sex == "HOMBRE"):
+                marital_status = random.choices(["SOLTERX","CASADX","VIUDX"], weights=[0.061,0.8,0.139])[0]
+            else:
+                marital_status = random.choices(["SOLTERX","CASADX","VIUDX"], weights=[0.065,0.46,0.475])[0]
+
+  
         # seleccion año inicio IMSERSO
         # seleccion viajes_totales IMSERSO
         # seleccion viajes n - 2 años
@@ -145,6 +157,7 @@ def user_generator(param):
         user.append(city)
         user.append(pension)
         user.append(disability_grade)
+        user.append(marital_status)
         users.append(user)
     
     return users
