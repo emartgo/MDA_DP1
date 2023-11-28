@@ -1,6 +1,7 @@
 import pandas as pd
 import random
 from datetime import date, datetime
+import pandas as pd
 
 ROOT_CSV = 'db/csv/'
 # -------------- lectura de las data bases --------------
@@ -76,7 +77,8 @@ def user_generator(param):
         dni = random.randint(10000000,99999999) 
         while(dni in dni_check):
             dni = random.randint(10000000,99999999)
-        dni_check.append(dni)
+        dni_check.append(str(dni))
+        dni = str(dni)
 
         # seleccion hombre mujer y su nombre segun su frecuencia
         sex_choice = random.randint(1,2) 
@@ -174,7 +176,6 @@ def user_generator(param):
             if(actual_year - years < 3):    # viajes en los ultimos 2 años
                 trips_n2_years += trips_per_year
             '''if(actual_year - years < 2):'''  # destino TOP
-        print(f'{first_year_IMSERSO}, {total_trips}, {trips_n2_years}')
 
        
         
@@ -185,22 +186,17 @@ def user_generator(param):
         user.append(last_name_1)
         user.append(last_name_2)
         user.append(sex)
-        user.append(age)
+        user.append(int(age))
         user.append(state)
         user.append(city)
-        user.append(pension)
+        user.append(float(pension))
         user.append(disability_grade)
         user.append(marital_status)
         user.append(first_year_IMSERSO)
         user.append(total_trips)
         user.append(trips_n2_years)
         users.append(user)
+        
     
     return users
 # --------------------------------------------------------
-
-
-check_users = user_generator(25)
-
-'''for user in check_users:
-    print(f'{user}')'''
