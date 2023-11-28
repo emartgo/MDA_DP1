@@ -1,5 +1,6 @@
 import pandas as pd
 import random
+from datetime import date, datetime
 
 ROOT_CSV = 'db/csv/'
 # -------------- lectura de las data bases --------------
@@ -66,12 +67,17 @@ def user_generator(param):
     dni_check = []
 
     for person in range(param):
+        if param >= 89999999: # numero maximo (n DNIs) 
+            break
+
         user = [] # lista de usuario
+
         # Generar dni y comprobar si esta disponible, si no, se genera otro sucesivamente
         dni = random.randint(10000000,99999999) 
         while(dni in dni_check):
             dni = random.randint(10000000,99999999)
         dni_check.append(dni)
+
         # seleccion hombre mujer y su nombre segun su frecuencia
         sex_choice = random.randint(1,2) 
         if(sex_choice == 1):
@@ -80,17 +86,23 @@ def user_generator(param):
         else:
             name = random.choices(df_woman_names, weights=df_woman_frec_names, k=1)[0]
             sex = "MUJER"
+
         # seleccion edad segun frecuencia
         age = random.choices(df_ages, weights=df_frec_ages, k=1)[0]
+        # Dato importante. La edad es la que se tendrá a finales de año
+
         # seleccion apellidos segun su frecuencia
         last_name_1 = random.choices(df_last_names, weights=df_frec_1_last_names, k=1)[0]
         last_name_2 = random.choices(df_last_names, weights=df_frec_2_last_names, k=1)[0]
+
         # seleccion provincia, ciudad segun frecuencia real
         n_city = random.choices(df_num_prov, weights=df_frec_cities, k=1)[0] - 1
         city = df_cities["Nombre_Provincia"].iloc[n_city]
         state = df_cities["Nombre_CCAA"].iloc[n_city]
+
         # seleccion pension usuario
         pension = random.choices(df_pension, weights=df_frec_pension, k=1)[0]
+
         # seleccion discapacidad
         if(age >= 65 and age < 70):   
             pobabilities = [0.864,0.136]                      # frecuencias obtenidas del INE 
@@ -127,6 +139,7 @@ def user_generator(param):
                 disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
             else:
                 disability_grade = 0
+
         # seleccion estado_civil
         if(age >= 65 and age < 70):
             if(sex == "HOMBRE"):
@@ -139,12 +152,32 @@ def user_generator(param):
             else:
                 marital_status = random.choices(["SOLTERX","CASADX","VIUDX"], weights=[0.065,0.46,0.475])[0]
 
-  
         # seleccion año inicio IMSERSO
-        # seleccion viajes_totales IMSERSO
-        # seleccion viajes n - 2 años
-        # seleccion destino TOP n-1 año
-        # seleccion n veces cancela sin motivo n-3 año
+        actual_year = datetime.now().year
+        posible_years = []
+        for posible_year in range(65, age+1):
+            n = posible_year - 65
+            posible_years.append(actual_year-n)
+        first_year_IMSERSO = random.choice(posible_years)
+
+        # seleccion viajes_totales IMSERSO y seleccion viajes n - 2 años
+        # seleccion destino TOP n-1 año y seleccion n veces cancela sin motivo n-3 años
+        total_trips = 0
+        trips_n2_years = 0
+        top_trip_last_year = 0
+        canceled_trips_n3 = 0
+        for years in range(first_year_IMSERSO, actual_year):
+            trips_per_year = random.choices([0, 1, 2], weights= [0.45, 0.45, 0.1])[0]
+            total_trips += trips_per_year
+            '''if(actual_year - years < 4 and trips_per_year > 0):''' # viajes cancelados en n-3 años
+                
+            if(actual_year - years < 3):    # viajes en los ultimos 2 años
+                trips_n2_years += trips_per_year
+            '''if(actual_year - years < 2):'''  # destino TOP
+        print(f'{first_year_IMSERSO}, {total_trips}, {trips_n2_years}')
+
+       
+        
         # seleccion calidad como cliente
         # Introducir usuario en la lista de usuarios
         user.append(dni) 
@@ -158,6 +191,9 @@ def user_generator(param):
         user.append(pension)
         user.append(disability_grade)
         user.append(marital_status)
+        user.append(first_year_IMSERSO)
+        user.append(total_trips)
+        user.append(trips_n2_years)
         users.append(user)
     
     return users
@@ -166,5 +202,5 @@ def user_generator(param):
 
 check_users = user_generator(25)
 
-for user in check_users:
-    print(f'{user}')
+'''for user in check_users:
+    print(f'{user}')'''
