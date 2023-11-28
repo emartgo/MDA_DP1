@@ -22,6 +22,7 @@ def sql_request(consulta):
         if connection is not None:
             cursor = connection.cursor()
             cursor.execute(consulta)
+            connection.commit()
             results = cursor.fetchall()
             return results
     except Error as e:

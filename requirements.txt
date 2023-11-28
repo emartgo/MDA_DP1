@@ -2,3 +2,4 @@ mysql.connector
 pandas
 random
 datetime
+mysql-connector-python
