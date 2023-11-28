@@ -48,6 +48,16 @@ df_ages = pd.read_csv('csv/edades_españa.csv', delimiter=';',
 df_ages["Edad"] = df_ages["Edad"].str.extract("(\d+)").fillna(-1).astype(int)
 df_frec_ages = df_ages["Total"]
 df_ages = df_ages["Edad"]
+df_pension = pd.read_csv('csv/pensiones.csv', delimiter=';',      
+                           dtype = {
+                               "CUANTIA":str,
+                               "JUBILACION":int
+                           })
+# para calcular la pension solo se tendrá en cuenta la cuantia por jubilacion
+df_pension["CUANTIA"] = df_pension["CUANTIA"].str.extract('De \d+,\d+ a (\d+,\d+)')
+df_pension["CUANTIA"] = df_pension["CUANTIA"].str.replace(',', '.').astype(float)
+df_frec_pension = df_pension["JUBILACION"]
+df_pension = df_pension["CUANTIA"]
 # --------------------------------------------------------
 
 # ----------------- generacion de usuarios ----------------
@@ -79,6 +89,51 @@ def user_generator(param):
         n_city = random.choices(df_num_prov, weights=df_frec_cities, k=1)[0] - 1
         city = df_cities["Nombre_Provincia"].iloc[n_city]
         state = df_cities["Nombre_CCAA"].iloc[n_city]
+        # seleccion pension usuario
+        pension = random.choices(df_pension, weights=df_frec_pension, k=1)[0]
+        # seleccion discapacidad
+        if(age >= 65 and age < 70):   
+            pobabilities = [0.6536,0.3464]                      # frecuencias obtenidas del INE 
+            disable = random.choices([False, True], weights=pobabilities)[0]
+            if(disable == True):
+                disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
+            else:
+                disability_grade = 0
+        elif(age >= 70 and age < 75):   
+            pobabilities = [0.5914,0.4086]                      # frecuencias obtenidas del INE 
+            disable = random.choices([False, True], weights=pobabilities)[0]
+            if(disable == True):
+                disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
+            else:
+                disability_grade = 0
+        elif(age >= 75 and age < 80):   
+            pobabilities = [0.523,0.477]                      # frecuencias obtenidas del INE 
+            disable = random.choices([False, True], weights=pobabilities)[0]
+            if(disable == True):
+                disability_grade = random.choices([33.00,65.00,80.00],weights=[0.57,0.24,0.19])[0]
+            else:
+                disability_grade = 0
+        elif(age >= 80 and age < 85):   
+            pobabilities = [0.4786,0.5214]                      # frecuencias obtenidas del INE 
+            disable = random.choices([False, True], weights=pobabilities)[0]
+            if(disable == True):
+                disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
+            else:
+                disability_grade = 0
+        elif(age >= 85):   
+            pobabilities = [0.5432,0.4568]                      # frecuencias obtenidas del INE 
+            disable = random.choices([False, True], weights=pobabilities)[0]
+            if(disable == True):
+                disability_grade = random.choices([33,65,80],weights=[0.57,0.24,0.19])[0]
+            else:
+                disability_grade = 0
+        # seleccion estado_civil
+        # seleccion año inicio IMSERSO
+        # seleccion viajes_totales IMSERSO
+        # seleccion viajes n - 2 años
+        # seleccion destino TOP n-1 año
+        # seleccion n veces cancela sin motivo n-3 año
+        # seleccion calidad como cliente
         # Introducir usuario en la lista de usuarios
         user.append(dni) 
         user.append(name)
@@ -88,7 +143,15 @@ def user_generator(param):
         user.append(age)
         user.append(state)
         user.append(city)
+        user.append(pension)
+        user.append(disability_grade)
         users.append(user)
     
     return users
 # --------------------------------------------------------
+
+
+check_users = user_generator(25)
+
+for user in check_users:
+    print(f'{user}')
