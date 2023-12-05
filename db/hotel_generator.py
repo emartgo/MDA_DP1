@@ -31,12 +31,11 @@ def hotel_generator(n_rooms):
     rooms_left = n_rooms
     hotels_left = n_hotels
 
-    ckech_rooms = 0
-
     for i, turistic_hotel in enumerate(range(n_hotels)):
 
         hotel = [] #el hotel
-        # asignar aleatoriamente un CIF  a cada hotel y comprobar que no se repiten
+
+        # asignar aleatoriamente un CIF a cada hotel y comprobar que no se repiten
         cif = str(random.randint(1000000,9999999)) 
         cif =  random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')+ cif + random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         while(cif in cif_check):
@@ -53,7 +52,7 @@ def hotel_generator(n_rooms):
         # generacion de las estrellas del hotel
         stars = random.choices([1,2,3,4,5],weights=[0.05,0.1,0.5,0.25,0.1])[0]
 
-        # telefono fijo con los prefijos correspondientes
+        # telefono fijo con los prefijos por provincia correspondientes
         for i, prefix in enumerate(df_telf["provincia"]):
             if province == prefix:
                 prefijo = df_telf["prefijo"][i]
@@ -109,6 +108,15 @@ def hotel_generator(n_rooms):
         if(hotels_left == 1):   # completamos las habitaciones sobrantes
             rooms = rooms_left
 
+        # introducir fechas
+
+        # inclusion de transporte 
+
+        # incluir las veces que el hotel ha participado en el IMSERSO
+
+        # incluir la valoracion de los usuarios de IMSERSO
+
+        # precio
         
         #introduce los campos generados en el hotel
         hotel.append(cif)
