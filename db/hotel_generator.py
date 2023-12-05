@@ -18,15 +18,24 @@ df_telf = pd.read_csv('csv/telefono_fijo.csv', delimiter=';',
 #---------------------------------------------------------
 
 #--------------- Generacion de hoteles -------------------
-def hotel_generator():
+def hotel_generator(n_rooms):
     hotels = [] #lista de hoteles
-    n_hotles = len(df_hotels)
-    cif_check = []
+    n_hotels = len(df_hotels)
+
+    # comprobar que se han pasado por parametro mas plazas de hoteles que hoteles
+    if(n_rooms < n_hotels):
+        print(f"ERROR, el numero de plazas a asingar debe ser como mínimo {n_hotels} (una plaza por cada hotel)")
+        return 0
     
-    for i, turistic_hotel in enumerate(range(n_hotles)):
+    cif_check = []
+    rooms_left = n_rooms
+    hotels_left = n_hotels
+
+    ckech_rooms = 0
+
+    for i, turistic_hotel in enumerate(range(n_hotels)):
 
         hotel = [] #el hotel
-
         # asignar aleatoriamente un CIF  a cada hotel y comprobar que no se repiten
         cif = str(random.randint(1000000,9999999)) 
         cif =  random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')+ cif + random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
@@ -63,18 +72,44 @@ def hotel_generator():
             reduced_mobility = True
             full_board = True
         elif(stars >= 3 and stars <= 4):
-            pool = random.choices([True, False], weights=[0.65,0.35])
-            reduced_mobility = random.choices([True, False], weights=[0.85,0.15])
+            pool = random.choices([True, False], weights=[0.65,0.35])[0]
+            reduced_mobility = random.choices([True, False], weights=[0.85,0.15])[0]
             if stars == 3:
-                full_board = random.choices([True, False], weights=[0.5,0.5])
+                full_board = random.choices([True, False], weights=[0.5,0.5])[0]
             else:
-                full_board = random.choices([True, False], weights=[0.75,0.25])
+                full_board = random.choices([True, False], weights=[0.75,0.25])[0]
         else:
-            pool = random.choices([True, False], weights=[0.25,0.75])
-            reduced_mobility = random.choices([True, False], weights=[0.5,0.5])
+            pool = random.choices([True, False], weights=[0.25,0.75])[0]
+            reduced_mobility = random.choices([True, False], weights=[0.5,0.5])[0]
             full_board = False
 
+        # tipo de turismo segun IMSERSO 2023
+        if(state == "Andalucía" or state == "Comunidad Valenciana" or state == "Murcia" or state == "Cataluña"):
+            travel_mod = random.choices(["Costa peninsular", "Escapada"], weights=[0.75,0.25])[0]
+        elif(state == "Canarias" or state == "Islas Baleares"):
+            travel_mod = random.choices(["Costa insular", "Escapada"], weights=[0.9,0.1])[0]
+        else:
+            travel_mod = "Escapada"
 
+        # habitaciones ofertadas por hotel
+        if(rooms_left > hotels_left):
+            no_overrooms = False
+            while(no_overrooms == False):
+                avg_rooms = int(round(rooms_left/hotels_left,0))
+                half_rooms = int(round(avg_rooms/2,0))
+                if(half_rooms<1):
+                    half_rooms = 1
+                double_rooms = int(round(avg_rooms*2,0))
+                rooms = random.randint(half_rooms,double_rooms)     #seleccionamos n habitaciones en un rango
+                if(rooms_left - rooms >= hotels_left):
+                    no_overrooms = True
+        else:   # para evitar que no haya hoteles sin habitacion
+            rooms = 1
+        
+        if(hotels_left == 1):   # completamos las habitaciones sobrantes
+            rooms = rooms_left
+
+        
         #introduce los campos generados en el hotel
         hotel.append(cif)
         hotel.append(name)
@@ -84,9 +119,16 @@ def hotel_generator():
         hotel.append(stars)
         hotel.append(phone)
         hotel.append(email)
+        hotel.append(reduced_mobility)
+        hotel.append(pool)
+        hotel.append(full_board)
+        hotel.append(travel_mod)
+        hotel.append(rooms)
         # introduce el hotel generado en la lista de hoteles
         hotels.append(hotel)
-        
-    print(hotels[0])
+        rooms_left -= rooms
+        hotels_left -= 1
+      
+    return(hotels)
 
-hotel_generator()
+#hotel_generator(500)
