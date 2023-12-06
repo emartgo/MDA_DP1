@@ -52,7 +52,21 @@ def sql_request(consulta):
     finally:
         if connection is not None and connection.is_connected():
             connection.close()
-            
+
+def sql_request_select(consulta):
+    try:
+        connection = db_connection_time()
+        if connection is not None:
+            cursor = connection.cursor()
+            cursor.execute(consulta)
+            results = cursor.fetchall()
+            return results
+    except Error as e:
+        print(f"Error al realizar consulta: {e}")
+    finally:
+        if connection is not None and connection.is_connected():
+            connection.close()
+
 def sql_request_test(consulta):
     try:
         connection = db_connection()
@@ -60,6 +74,20 @@ def sql_request_test(consulta):
             cursor = connection.cursor()
             cursor.execute(consulta)
             connection.commit()
+            results = cursor.fetchall()
+            return results
+    except Error as e:
+        print(f"Error al realizar consulta: {e}")
+    finally:
+        if connection is not None and connection.is_connected():
+            connection.close()
+            
+def sql_request_test_select(consulta):
+    try:
+        connection = db_connection()
+        if connection is not None:
+            cursor = connection.cursor()
+            cursor.execute(consulta)
             results = cursor.fetchall()
             return results
     except Error as e:

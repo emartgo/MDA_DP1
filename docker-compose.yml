@@ -37,3 +37,12 @@ services:
     command: python3 db_ingestion.py
     depends_on:
       - python_create_tables
+  
+  python_bookings:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    command: python3 booking_generator.py
+    depends_on:
+      - python_insert_tables
