@@ -12,6 +12,3 @@ COPY requirements.txt .
 
 # Instalar cualquier dependencia
 RUN pip install -r requirements.txt
-
-# Comando para ejecutar el script
-CMD ["python3", "./db_creation_tables.py"]

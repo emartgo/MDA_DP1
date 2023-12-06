@@ -21,7 +21,8 @@ sql_create_users_table = """
         trips_n2_years INT,
         canceled_trips_n3 INT,
         top_trip_last_year INT,
-        mean_score FLOAT
+        mean_score FLOAT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 """
 sql_request(sql_create_users_table)
@@ -29,14 +30,20 @@ sql_request(sql_create_users_table)
 sql_create_hotels_table = """
     CREATE TABLE hotels (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        cif VARCHAR(12),
+        cif VARCHAR(255),
         name VARCHAR(255),
         state VARCHAR(255),
         province VARCHAR(255),
         location VARCHAR(255),
         stars INT,
-        phone VARCHAR(20),
-        email VARCHAR(255)
+        phone VARCHAR(255),
+        email VARCHAR(255),
+        reduced_mobility BOOLEAN,
+        pool BOOLEAN,
+        full_board BOOLEAN,
+        travel_mod VARCHAR(255),
+        rooms INT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 """
 sql_request(sql_create_hotels_table)

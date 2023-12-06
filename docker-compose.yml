@@ -20,10 +20,20 @@ services:
     ports:
       - 8080:80
 
-  python_script:
+  python_create_tables:
     build:
       context: .
       dockerfile: Dockerfile
     restart: on-failure
+    command: python3 db_creation_tables.py
     depends_on:
       - db
+
+  python_insert_tables:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    command: python3 db_ingestion.py
+    depends_on:
+      - python_create_tables
