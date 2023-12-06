@@ -225,3 +225,5 @@ def user_generator(param:int):
     
     return users
 # --------------------------------------------------------
+
+print(user_generator(1))
