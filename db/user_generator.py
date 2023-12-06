@@ -1,7 +1,7 @@
 import pandas as pd
 import random
 from datetime import date, datetime
-import pandas as pd
+import numpy as np
 
 ROOT_CSV = 'db/csv/'
 # -------------- lectura de las data bases --------------
@@ -63,7 +63,7 @@ df_pension = df_pension["CUANTIA"]
 # --------------------------------------------------------
 
 # ----------------- generacion de usuarios ----------------
-def user_generator(param):
+def user_generator(param:int):
     users = [] # lista de usuarios
     dni_check = []
 
@@ -74,11 +74,12 @@ def user_generator(param):
         user = [] # lista de usuario
 
         # Generar dni y comprobar si esta disponible, si no, se genera otro sucesivamente
-        dni = random.randint(10000000,99999999) 
+        dni = str(random.randint(10000000,99999999))
+        dni = dni + random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         while(dni in dni_check):
-            dni = random.randint(10000000,99999999)
-        dni_check.append(str(dni))
-        dni = str(dni)
+            dni = str(random.randint(10000000,99999999))
+            dni = dni + random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+        dni_check.append(dni)
 
         # seleccion hombre mujer y su nombre segun su frecuencia
         sex_choice = random.randint(1,2) 
@@ -169,17 +170,38 @@ def user_generator(param):
         top_trip_last_year = 0
         canceled_trips_n3 = 0
         for years in range(first_year_IMSERSO, actual_year):
-            trips_per_year = random.choices([0, 1, 2], weights= [0.45, 0.45, 0.1])[0]
+            trips_per_year = random.choices([0, 1, 2], weights= [0.45, 0.45, 0.1])[0]   # total viajes
             total_trips += trips_per_year
-            '''if(actual_year - years < 4 and trips_per_year > 0):''' # viajes cancelados en n-3 años
-                
+            if(actual_year - years < 4 and trips_per_year > 0): # viajes cancelados en n-3 años
+                for trip in range(0,trips_per_year):
+                    # Si ha cancelado previamente algun viaje es más propenso a cancelar otra viaje
+                    if(canceled_trips_n3 > 0):
+                        canceled_trips_n3 += random.choices([0, 1], weights= [0.63, 0.37])[0]
+                    else:
+                        canceled_trips_n3 += random.choices([0, 1], weights= [0.9, 0.1])[0]
             if(actual_year - years < 3):    # viajes en los ultimos 2 años
                 trips_n2_years += trips_per_year
-            '''if(actual_year - years < 2):'''  # destino TOP
-
-       
+            if(years == actual_year-1 and trips_per_year > 0):  # destino TOP
+                top_trip_last_year = random.choices([0, 1], weights= [0.9, 0.1])[0]
         
         # seleccion calidad como cliente
+        # cada hotel da una puntuacion del 1 al 5 al cliente segun haya sido como huesped, usuarios que no han viajado nunca tendra -1 y no será tomado en cuenta
+        score_per_trip=[]
+        mean_score = -1.0
+        for trip in range(0,total_trips):
+            if(mean_score == -1):
+                score = random.choices([1.0, 2.0, 3.0, 4.0, 5.0], weights= [0.05,0.05,0.1,0.2,0.6])[0]
+                score_per_trip.append(score)
+                mean_score = score
+            else:                       # si ha tenido una mala puntuacion es mas probable a que la repita
+                if(mean_score > 3):
+                    score = random.choices([1.0, 2.0, 3.0, 4.0, 5.0], weights= [0.05,0.05,0.1,0.2,0.6])[0]
+                else:
+                    score = random.choices([1.0, 2.0, 3.0, 4.0, 5.0], weights= [0.1,0.1,0.15,0.15,0.5])[0]
+                score_per_trip.append(score)
+                mean_score = float(np.mean(score_per_trip))
+        mean_score = round(mean_score,2)
+       
         # Introducir usuario en la lista de usuarios
         user.append(dni) 
         user.append(name)
@@ -195,8 +217,13 @@ def user_generator(param):
         user.append(first_year_IMSERSO)
         user.append(total_trips)
         user.append(trips_n2_years)
+        user.append(canceled_trips_n3)
+        user.append(top_trip_last_year)
+        user.append(mean_score)
         users.append(user)
         
     
     return users
 # --------------------------------------------------------
+
+print(user_generator(1))
