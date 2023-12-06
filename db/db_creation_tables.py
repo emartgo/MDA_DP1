@@ -36,7 +36,18 @@ sql_create_hotels_table = """
         location VARCHAR(255),
         stars INT,
         phone VARCHAR(20),
-        email VARCHAR(255)
+        email VARCHAR(255),
+        reduced_mobility BOOLEAN,
+        pool BOOLEAN,
+        full_board BOOLEAN,
+        travel_mod VARCHAR(255),
+        rooms INT,
+        transportation BOOLEAN,
+        initial_date DATE,
+        final_date DATE,
+        first_year_IMSERSO INT,
+        mean_score FLOAT,
+        price FLOAT   
     );
 """
 sql_request(sql_create_hotels_table)
