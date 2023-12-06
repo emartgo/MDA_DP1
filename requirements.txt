@@ -1,6 +1,5 @@
 mysql.connector
 pandas
-random
 datetime
 numpy
 mysql-connector-python
