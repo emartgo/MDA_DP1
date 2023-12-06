@@ -1,6 +1,8 @@
 from db_connection import *
+import time
 
 # ----------------- tables creation ----------------
+start = time.time()
 
 sql_create_users_table = """
     CREATE TABLE users (
@@ -59,3 +61,7 @@ sql_create_bookings_table = """
     );
 """
 sql_request(sql_create_bookings_table)
+
+end = time.time()
+
+print(f"Time elapsed for tables creation: {round((end - start), 2)} s")

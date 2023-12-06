@@ -123,7 +123,7 @@ def hotel_generator(n_rooms):
         hotel.append(name)
         hotel.append(state)
         hotel.append(province)
-        hotel.append(location)
+        hotel.append(location) if not pd.isnull(location) else hotel.append(" ")
         hotel.append(stars)
         hotel.append(phone)
         hotel.append(email)
