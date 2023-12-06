@@ -63,7 +63,7 @@ df_pension = df_pension["CUANTIA"]
 # --------------------------------------------------------
 
 # ----------------- generacion de usuarios ----------------
-def user_generator(param):
+def user_generator(param:int):
     users = [] # lista de usuarios
     dni_check = []
 
@@ -74,11 +74,12 @@ def user_generator(param):
         user = [] # lista de usuario
 
         # Generar dni y comprobar si esta disponible, si no, se genera otro sucesivamente
-        dni = random.randint(10000000,99999999) 
+        dni = str(random.randint(10000000,99999999))
+        dni = dni + random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         while(dni in dni_check):
-            dni = random.randint(10000000,99999999)
-        dni_check.append(str(dni))
-        dni = str(dni)
+            dni = str(random.randint(10000000,99999999))
+            dni = dni + random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+        dni_check.append(dni)
 
         # seleccion hombre mujer y su nombre segun su frecuencia
         sex_choice = random.randint(1,2) 
