@@ -46,3 +46,12 @@ services:
     command: python3 booking_generator.py
     depends_on:
       - python_insert_tables
+
+  python_rankings:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    command: python3 ranking_generator.py
+    depends_on:
+      - python_insert_tables
