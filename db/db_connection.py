@@ -6,7 +6,7 @@ import time
 def db_connection():
     try:
         connection = mysql.connector.connect(
-            host='db',
+            host='localhost',
             user='myuser',
             password='mypassword',
             database='mydatabase'
@@ -15,8 +15,7 @@ def db_connection():
     except Error as e:
         print(f"Error connecting to the database: {e}")
         return None
-
-def db_connection_time():
+def db_connection_docker():
     start_time = time.time()  # Guardar el tiempo de inicio
     while True:
         try:
@@ -37,14 +36,57 @@ def db_connection_time():
                 return None
 
             time.sleep(5)
-# SQL request
+
+# SQL request docker
 def sql_request(consulta):
     try:
-        connection = db_connection_time()
+        connection = db_connection_docker()
         if connection is not None:
             cursor = connection.cursor()
             cursor.execute(consulta)
             connection.commit()
+            results = cursor.fetchall()
+            return results
+    except Error as e:
+        print(f"Error al realizar consulta: {e}")
+    finally:
+        if connection is not None and connection.is_connected():
+            connection.close()
+def sql_request_select(consulta):
+    try:
+        connection = db_connection_docker()
+        if connection is not None:
+            cursor = connection.cursor()
+            cursor.execute(consulta)
+            results = cursor.fetchall()
+            return results
+    except Error as e:
+        print(f"Error al realizar consulta: {e}")
+    finally:
+        if connection is not None and connection.is_connected():
+            connection.close()
+
+# SQL request test
+def sql_request_test(consulta):
+    try:
+        connection = db_connection()
+        if connection is not None:
+            cursor = connection.cursor()
+            cursor.execute(consulta)
+            connection.commit()
+            results = cursor.fetchall()
+            return results
+    except Error as e:
+        print(f"Error al realizar consulta: {e}")
+    finally:
+        if connection is not None and connection.is_connected():
+            connection.close()            
+def sql_request_test_select(consulta):
+    try:
+        connection = db_connection()
+        if connection is not None:
+            cursor = connection.cursor()
+            cursor.execute(consulta)
             results = cursor.fetchall()
             return results
     except Error as e:
