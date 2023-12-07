@@ -55,14 +55,7 @@ sql_create_hotels_table = """
         full_board BOOLEAN,
         travel_mod VARCHAR(255),
         rooms INT,
-        transportation BOOLEAN,
-        initial_date DATE,
-        final_date DATE,
-        first_year_IMSERSO INT,
-        mean_score FLOAT,
-        price FLOAT   
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-
     );
 """
 sql_request(sql_create_hotels_table)
