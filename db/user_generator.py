@@ -3,6 +3,7 @@ import random
 from datetime import date, datetime
 import numpy as np
 
+PONDERACIONES = [1, 0.01, 0.3, 0.5, 5, 5, 1.5]
 ROOT_CSV = 'db/csv/'
 # -------------- lectura de las data bases --------------
 df_woman_names = pd.read_csv('csv/woman_name.csv', 
@@ -201,27 +202,53 @@ def user_generator(param:int):
                 score_per_trip.append(score)
                 mean_score = float(np.mean(score_per_trip))
         mean_score = round(mean_score,2)
-       
+
+        ponderacion = 0
+
+        ponderacion += PONDERACIONES[0] * age # más cuanto más viejo
+        ponderacion -= PONDERACIONES[1] * pension # menos cuando más pension
+        ponderacion += PONDERACIONES[2] * disability_grade # más cuando más discapacidad
+        current_year = datetime.now().year
+        years_in_IMSERSO = current_year - first_year_IMSERSO
+        ponderacion += PONDERACIONES[3] * total_trips
+        ponderacion -= PONDERACIONES[4] * canceled_trips_n3
+        ponderacion -= PONDERACIONES[5] * top_trip_last_year
+        if(mean_score<0):
+            ponderacion += PONDERACIONES[6] * 5
+        else:
+            ponderacion += PONDERACIONES[6] * mean_score
+
+
         # Introducir usuario en la lista de usuarios
         user.append(dni) 
+        user.append(ponderacion)
         user.append(name)
         user.append(last_name_1)
         user.append(last_name_2)
         user.append(sex)
-        user.append(int(age))
+        user.append(int(age))  #6
         user.append(state)
         user.append(city)
         user.append(float(pension))
         user.append(disability_grade)
         user.append(marital_status)
-        user.append(first_year_IMSERSO)
+        user.append(first_year_IMSERSO)  #12
+        user.append(years_in_IMSERSO)
         user.append(total_trips)
         user.append(trips_n2_years)
-        user.append(canceled_trips_n3)
-        user.append(top_trip_last_year)
+        user.append(canceled_trips_n3)  #16
+        user.append(top_trip_last_year) 
         user.append(mean_score)
         users.append(user)
         
     
     return users
 # --------------------------------------------------------
+
+
+indices_a_mostrar = [0,1,6,9,10,14,16,17,18]
+data = user_generator(10)
+# Itera sobre cada subarray y muestra solo los elementos en los índices especificados
+for subarray in data:
+    elementos_mostrados = [subarray[i] for i in indices_a_mostrar]
+    print(elementos_mostrados)
