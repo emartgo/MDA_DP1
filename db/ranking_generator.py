@@ -1,10 +1,13 @@
 from db_connection import *
 import datetime
+import time
+
+time.sleep(60) # espera 2 minutos para que se cree la base de datos
 
 PONDERACIONES = [0.2, 0.2, 0.2, 0.2, 0.2]
 
 sql_usuarios = "SELECT id, age, pension, disability_grade, first_year_IMSERSO, canceled_trips_n3 FROM users"
-usuarios = sql_request_test_select(sql_usuarios)
+usuarios = sql_request_select(sql_usuarios)
 
 # ------------- LÓGICA DE PONDERACIONES -------------
 
@@ -31,4 +34,4 @@ for usuario in usuarios:
 
 sql = "INSERT INTO rankings (user_id, ranking) VALUES"
 sql_values = sql_values[:-1] + ";"
-sql_request_test(sql + sql_values)
+sql_request(sql + sql_values)
