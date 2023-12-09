@@ -1,11 +1,7 @@
 import pandas as pd
 import random
-from datetime import datetime, timedelta
-import numpy as np
-
 
 ROOT_CSV = 'db/csv/'
-this_year = datetime.now().year
 # -------------- lectura de las data bases --------------
 df_hotels = pd.read_csv('csv/alojamientos_turisticos.csv', delimiter=',',
                         dtype= {
@@ -113,95 +109,16 @@ def hotel_generator(n_rooms):
             rooms = rooms_left
 
         # introducir fechas
-        # si es un viaje de costa, puede ir en dos temporadas y el viaje ser de 8 o 10 dias
-        if(travel_mod == "Costa peninsular" or travel_mod == "Costa insular"):
-            season = random.choice(["first", "second"])
-            if(season == "first"):
-                begin_season = datetime(this_year, 9, 1)
-                end_season = datetime(this_year, 11, 15)
-                days_between = (end_season - begin_season).days
-                initial_date = begin_season + timedelta(days=random.randint(0, days_between))
-                trip_days = random.choice([8, 10])
-                final_date = initial_date + timedelta(days=trip_days)
-            else:
-                begin_season = datetime(this_year+1, 3, 15)
-                end_season = datetime(this_year+1, 6, 30)
-                days_between = (end_season - begin_season).days
-                initial_date = begin_season + timedelta(days=random.randint(0, days_between))
-                trip_days = random.choice([8, 10])
-                final_date = initial_date + timedelta(days=trip_days)
-        else:
-            begin_season = datetime(this_year, 10, 15)
-            end_season = datetime(this_year+1, 5, 15)
-            days_between = (end_season - begin_season).days
-            initial_date = begin_season + timedelta(days=random.randint(0, days_between))
-            trip_days = random.choice([4, 5, 6])
-            final_date = initial_date + timedelta(days=trip_days)
 
-        # inclusion de transporte
-        if(travel_mod == "Escapada"):
-            transportation = True
-        else: 
-            transportation = random.choices([True, False], weights=[0.5,0.5])[0]
+        # inclusion de transporte 
 
         # incluir las veces que el hotel ha participado en el IMSERSO
-        first_year_IMSERSO = random.randint(1978, this_year)
 
         # incluir la valoracion de los usuarios de IMSERSO
-        score_per_trip=[]
-        mean_score = -1.0
-        years_participated = this_year-1-first_year_IMSERSO
-        for trip in range(0, years_participated*rooms):
-            if(mean_score == -1):
-                score = random.choices([1.0, 2.0, 3.0, 4.0, 5.0], weights= [0.05,0.05,0.1,0.2,0.6])[0]
-                score_per_trip.append(score)
-                mean_score = score
-            else:                       # si ha tenido una mala puntuacion es mas probable a que la repita
-                if(mean_score > 3):
-                    score = random.choices([1.0, 2.0, 3.0, 4.0, 5.0], weights= [0.05,0.05,0.1,0.2,0.6])[0]
-                else:
-                    score = random.choices([1.0, 2.0, 3.0, 4.0, 5.0], weights= [0.1,0.1,0.15,0.15,0.5])[0]
-                score_per_trip.append(score)
-                mean_score = float(np.mean(score_per_trip))
-        mean_score = round(mean_score,2)
 
-        # precio segun IMSERSO
-        if(travel_mod != "Escapada"):
-            if(transportation == False):
-                if(trip_days >= 9):
-                    price = 253.65
-                else:
-                    price = 210.72
-            else:
-                if(travel_mod == "Costa peninsular"):
-                    if(trip_days >= 9):
-                        price = 290.07
-                    else:
-                        price = 228.93
-                else:
-                    if(state == "Islas Baleares"):
-                        if(trip_days >= 9):
-                            price = 331.49
-                        else:
-                            price = 267.73
-                    else:
-                        if(trip_days >= 9):
-                            price = 435.95
-                        else:
-                            price = 355.30
-        else:
-            if(trip_days == 4):
-                price = 124.68
-            elif(trip_days == 5):
-                price = 286.62
-            else:
-                price = 293.16
-
-
+        # precio
         
-
-        
-        # introduce los campos generados en el hotel
+        #introduce los campos generados en el hotel
         hotel.append(cif)
         hotel.append(name)
         hotel.append(state)
@@ -215,16 +132,11 @@ def hotel_generator(n_rooms):
         hotel.append(full_board)
         hotel.append(travel_mod)
         hotel.append(rooms)
-        hotel.append(transportation)
-        hotel.append(initial_date)
-        hotel.append(final_date)
-        hotel.append(first_year_IMSERSO)
-        hotel.append(mean_score)
-        hotel.append(price)
         # introduce el hotel generado en la lista de hoteles
         hotels.append(hotel)
         rooms_left -= rooms
         hotels_left -= 1
-    
+      
     return(hotels)
 
+#hotel_generator(500)
