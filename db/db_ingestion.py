@@ -3,7 +3,10 @@ from user_generator import *
 
 # ----------------- users generator ----------------
 
-users = user_generator(100)
+USERS = 2000
+# ----------------- users ingestion ----------------
+start = time.time()
+time.sleep(10)
 
 # --------------------------------------------------
 
