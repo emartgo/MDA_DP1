@@ -4,6 +4,7 @@ import time
 
 time.sleep(60) # espera 2 minutos para que se cree la base de datos
 
+start = time.time()
 PONDERACIONES = [1, 0.01, 0.3, 0.5, 3, 9, 5, 1.5]
 # age, pension, disc, tot_trip, tn2, t_can, top, score
 
@@ -44,3 +45,6 @@ for usuario in usuarios:
 sql = "INSERT INTO rankings (user_id, ranking) VALUES"
 sql_values = sql_values[:-1] + ";"
 sql_request(sql + sql_values)
+
+end = time.time()
+print(f"Time elapsed for ranking generator: {round((end - start), 2)} s")
