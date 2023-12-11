@@ -24,10 +24,20 @@ sql_create_users_table = """
         canceled_trips_n3 INT,
         top_trip_last_year INT,
         mean_score FLOAT,
+        message VARCHAR(500) DEFAULT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 """
 sql_request(sql_create_users_table)
+
+sql_create_ponderacion_table = """
+    CREATE TABLE ponderaciones (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        description VARCHAR(255),
+        weight FLOAT
+    );
+"""
+sql_request(sql_create_ponderacion_table)
 
 sql_create_hotels_table = """
     CREATE TABLE hotels (
@@ -55,6 +65,7 @@ sql_create_bookings_table = """
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT,
         hotel_id INT,
+        validated BOOLEAN DEFAULT FALSE,
         FOREIGN KEY (user_id) REFERENCES users(id),
         FOREIGN KEY (hotel_id) REFERENCES hotels(id),
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -62,6 +73,16 @@ sql_create_bookings_table = """
 """
 sql_request(sql_create_bookings_table)
 
-end = time.time()
+sql_create_ranking_table = """
+    CREATE TABLE rankings (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT,
+        ranking INT,
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+"""
+sql_request(sql_create_ranking_table)
 
+end = time.time()
 print(f"Time elapsed for tables creation: {round((end - start), 2)} s")

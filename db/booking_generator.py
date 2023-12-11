@@ -3,7 +3,9 @@ import random
 import time
 
 time.sleep(60)
+
 start = time.time()
+
 # OBTENEMOS LOS IDs DE LOS USUARIOS PARA CREAR LAS RESERVAS
 sql_id_usuarios = "SELECT id FROM users"
 id_usuarios_consulta = None

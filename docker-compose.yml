@@ -54,6 +54,7 @@ services:
     restart: on-failure
     command: python3 ranking_generator.py
     depends_on:
+
       - python_insert_tables
 
   python_adjudication:
@@ -65,3 +66,5 @@ services:
     depends_on:
       - python_rankings
       - python_bookings
+
+      - python_insert_tables
