@@ -2,8 +2,8 @@ from db_connection import *
 import random
 import time
 
-time.sleep(120)
-
+time.sleep(60)
+start = time.time()
 # OBTENEMOS LOS IDs DE LOS USUARIOS PARA CREAR LAS RESERVAS
 sql_id_usuarios = "SELECT id FROM users"
 id_usuarios_consulta = None
@@ -19,8 +19,9 @@ id_hoteles_consulta = sql_request_select(sql_id_hoteles)
 id_hoteles = []
 for id in id_hoteles_consulta:
     id_hoteles.append(id[0])
-# GESTIONAMOS LAS RESERVAS
 
+
+# GESTIONAMOS LAS RESERVAS
 reservas = []
 for id in id_usuarios:
     id_hoteles_seleccionados = random.sample(id_hoteles, 5)
@@ -30,3 +31,6 @@ for id in id_usuarios:
 sql_query = "INSERT INTO bookings (user_id, hotel_id) VALUES "
 sql_query += ",\n".join(reservas) + ";"
 sql_request(sql_query)
+
+end = time.time()
+print(f"Time elapsed for booking generator: {round((end - start), 2)} s")
