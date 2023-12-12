@@ -2,7 +2,7 @@ from db_connection import *
 import datetime
 import time
 
-time.sleep(60) # espera 2 minutos para que se cree la base de datos
+time.sleep(90) # espera 
 
 start = time.time()
 PONDERACIONES = [1, 0.01, 0.3, 0.5, 3, 9, 5, 1.5]
