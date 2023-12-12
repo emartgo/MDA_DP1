@@ -77,7 +77,7 @@ sql_create_ranking_table = """
     CREATE TABLE rankings (
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT,
-        ranking INT,
+        ranking FLOAT,
         FOREIGN KEY (user_id) REFERENCES users(id),
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );

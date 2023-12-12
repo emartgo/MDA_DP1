@@ -8,6 +8,7 @@ import time
 USERS = 2000
 # ----------------- users ingestion ----------------
 start = time.time()
+time.sleep(10)
 
 users = user_generator(USERS)
 users_for_sql = ""
