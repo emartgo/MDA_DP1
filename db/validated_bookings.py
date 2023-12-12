@@ -1,7 +1,9 @@
 from db_connection import *
+import time
 
 time.sleep(100)
 
+start = time.time()
 sql_users = "SELECT user_id, ranking from rankings ORDER BY ranking DESC;"
 users = sql_request_select(sql_users)
 
@@ -23,3 +25,5 @@ for user in users:
             break
     sql_message_user = f"UPDATE users SET message = 'NO has conseguido reserva en esta convocatoria' WHERE id = '{user[0]}';"
     sql_request(sql_message_user)
+end = time.time()
+print(f"Time elapsed for ranking generator: {round((end - start), 2)} s")

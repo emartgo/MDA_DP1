@@ -26,7 +26,7 @@ for id in id_hoteles_consulta:
 # GESTIONAMOS LAS RESERVAS
 reservas = []
 for id in id_usuarios:
-    id_hoteles_seleccionados = random.sample(id_hoteles, 5)
+    id_hoteles_seleccionados = random.sample(id_hoteles, 5) # 5 reservas por usuario
     for id_hotel in id_hoteles_seleccionados:
         reservas.append(f"({id}, {id_hotel})")
         
