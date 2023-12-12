@@ -57,14 +57,14 @@ services:
 
       - python_insert_tables
 
-  python_adjudication:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: on-failure
-    command: python3 validated_bookings.py
-    depends_on:
-      - python_rankings
-      - python_bookings
+  # python_adjudication:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   restart: on-failure
+  #   command: python3 validated_bookings.py
+  #   depends_on:
+  #     - python_rankings
+  #     - python_bookings
 
-      - python_insert_tables
+  #     - python_insert_tables

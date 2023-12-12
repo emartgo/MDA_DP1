@@ -2,7 +2,7 @@ from db_connection import *
 import random
 import time
 
-time.sleep(60)
+time.sleep(90)
 
 start = time.time()
 
